@@ -89,6 +89,7 @@ public class ArraySorter<T> where T:IComparable {
 
     }
     public void Sort() {
+        var startTime = System.Diagnostics.Stopwatch.StartNew();
         if (this.array.Length > 10) {
             logger.Logging("Выбран алгоритм быстрой сортировки");
             QuickSort();
@@ -96,6 +97,13 @@ public class ArraySorter<T> where T:IComparable {
             logger.Logging("Выбран алгоритм пузырьковой сортировки");
             BubbleSort();
         }
+        startTime.Stop();
+        var resultTime = startTime.Elapsed;
+
+        string time_for_logging = String.Format("Отсортировано за {0}.{1} секунд",
+            resultTime.Seconds,
+            resultTime.Milliseconds);
+        logger.Logging(time_for_logging);
     }
     void BubbleSort() {
         int len = this.array.Length;
