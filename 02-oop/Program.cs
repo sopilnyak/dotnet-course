@@ -76,36 +76,29 @@ namespace sorts {
             QuickSortRecursion(arr, 0, arr.Length - 1);
         }
 
+        private int Partition(T[] arr, int start_idx, int end_idx) {
+            T pivot = arr[end_idx];
+
+            var real_pivot_idx = start_idx - 1;
+            
+            for (var i = start_idx; i <= end_idx - 1; ++i) {
+                if (arr[i].CompareTo(pivot) < 0) {
+                    ++real_pivot_idx;
+                    (arr[real_pivot_idx], arr[i]) = (arr[i], arr[real_pivot_idx]);
+                }
+            }
+
+            (arr[real_pivot_idx + 1], arr[end_idx]) = (arr[end_idx], arr[real_pivot_idx + 1]);
+            return real_pivot_idx + 1;
+        }
+        
         private void QuickSortRecursion(T[] arr, int start_idx, int end_idx) {
-            if (start_idx == end_idx) {
+            if (start_idx >= end_idx) {
                 return;
             }
-            int pivot_idx = (end_idx + start_idx + 1) / 2;
-            T pivot = arr[pivot_idx];
-            int begin = start_idx;
-            int end = end_idx;
-            while (begin <= end) {
-                while (arr[begin].CompareTo(pivot) < 0) {
-                    ++begin;
-                }
-
-                while (arr[end].CompareTo(pivot) > 0) {
-                    --end;
-                }
-
-                if (begin < end) {
-                    (arr[begin], arr[end]) = (arr[end], arr[begin]);
-                    ++begin;
-                    --end;
-                }
-
-                if (begin == end) {
-                    break;
-                }
-            }
-
-            QuickSortRecursion(arr, start_idx, begin - 1);
-            QuickSortRecursion(arr, begin, end_idx);
+            int new_parts = Partition(arr, start_idx, end_idx);
+            QuickSortRecursion(arr, start_idx, new_parts - 1);
+            QuickSortRecursion(arr, new_parts + 1, end_idx);
         }
     }
 }
@@ -191,14 +184,14 @@ namespace oop {
 
         public static void TestIntArray() {
             // Тест с большим кол-вом элементов
-            Random random = new Random();
+            Random random = new Random(42);
 
-            int len = 10000;
+            int len = 1000000;
 
             int[] arr = new int[len];
             
             for (int i = 0; i < len; ++i) {
-                arr[i] = random.Next(0, Int32.MaxValue);
+                arr[i] = random.Next(0, 100);
             }
 
             ILogger logger = new FileLogger("/home/jidge/dotnet-course/02-oop/log.txt");
@@ -218,8 +211,10 @@ namespace oop {
                     logger.Log("Test FAILED! Reason: Array is not sorted!");
                     logger.Log("==================================");
                     return;
-                } 
+                }
+                item = elem;
             }
+
             logger.Log("Array is sorted!");
             logger.Log("==================================");
             logger.Log("Test PASSED!");
