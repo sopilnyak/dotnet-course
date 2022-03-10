@@ -45,7 +45,7 @@ public class GenericArraySorter<T> where T:IComparable {
         this.size_constant = size_constant;
         this.logger = logger;
 
-        logger.Log("Array with length {array.Length} accepted");
+        logger.Log($"Array with length {array.Length} accepted");
     }
 
     public GenericArraySorter(T[] array, int size_constant): this(array, new ConsoleLog(), size_constant){}
