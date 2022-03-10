@@ -65,7 +65,7 @@ public class GenericArraySorter<T> where T:IComparable {
     void BubbleSort() {
         for (int i = 0; i < array.Length; i++) {
             for (int j = 0; j < array.Length; j++) {
-                if (array[i].CompareTo(array[j]) > 0) {
+                if (array[i].CompareTo(array[j]) < 0) {
                     (array[i], array[j]) = (array[j], array[i]);
                     }
                 }
@@ -122,6 +122,25 @@ public class GenericArraySorter<T> where T:IComparable {
     }
 }
 
+class Program {
+        public static void Main (string[] args) {
+            int[] array = {1, 2, 3, 2, 5, 4, 9, 6, 7};
+            GenericArraySorter<int> sorter = new GenericArraySorter<int>(array);
+            foreach (int number in sorter.Array)
+            {
+                Console.WriteLine($"{number}");
+            } 
 
+            int[] array2 = {1, 2, 3, 2, 5, 4, 9, 6, 7, 0 ,12, 45, 32, 23, 10, 5, 10};
+            GenericArraySorter<int> sorter2 = new GenericArraySorter<int>(array2, 10);
+            foreach (int number in sorter2.Array)
+            {
+                Console.WriteLine($"{number}");
+            } 
+        }
+    }
 }
+
+
+
 
