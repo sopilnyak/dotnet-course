@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "04-collections", "04-collec
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "05-multithreading", "05-multithreading\05-multithreading.csproj", "{197944FD-FA80-44AA-AB01-A27D86B7251A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "06-testing", "06-testing\06-testing.csproj", "{5740A443-80C0-48FE-83E5-EA2CFF3D8C24}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{197944FD-FA80-44AA-AB01-A27D86B7251A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{197944FD-FA80-44AA-AB01-A27D86B7251A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{197944FD-FA80-44AA-AB01-A27D86B7251A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5740A443-80C0-48FE-83E5-EA2CFF3D8C24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5740A443-80C0-48FE-83E5-EA2CFF3D8C24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5740A443-80C0-48FE-83E5-EA2CFF3D8C24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5740A443-80C0-48FE-83E5-EA2CFF3D8C24}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
