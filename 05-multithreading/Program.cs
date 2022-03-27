@@ -108,16 +108,6 @@ static class Program
             return;
         }
 
-        // using (FileStream stream = new FileStream(
-        //     processed_articles, FileMode.Append,
-        //     FileAccess.Write, FileShare.None, 4096, true))
-        // using (StreamWriter sw = new StreamWriter(stream))
-        // {
-        //     sw.WriteLine(news_link.ToString());
-        // }
-
-        // await File.AppendAllLinesAsync(processed_articles, new[] { news_link.ToString() });
-
         news_link.MarkProcessed();
 
         Console.WriteLine($"Downloaded article: {news_link.ToString()}");
