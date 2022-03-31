@@ -1,0 +1,10 @@
+https://news.un.org/feed/subscribe/en/news/all/rss.xml
+https://rss.nytimes.com/services/xml/rss/nyt/World.xml
+https://www.buzzfeed.com/world.xml
+https://rss.stopgame.ru/rss_news.xml
+https://www.gq.com/feed/rss
+https://feeds.skynews.com/feeds/rss/strange.xml
+https://lenta.ru/rss/news
+https://vedomosti.ru/rss/news
+https://lifehacker.com/rss
+https://www.polygon.com/rss/index.xml
