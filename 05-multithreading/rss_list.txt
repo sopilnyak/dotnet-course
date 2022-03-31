@@ -1,10 +1,10 @@
-https://lenta.ru/rss/
+http://rss.cnn.com/rss/edition_football.rss
 https://edu.ru/news/it-v-obrazovanii/feed.rss
 https://edu.ru/news/glavnye-novosti/feed.rss
 https://edu.ru/news/olimpiady/feed.rss
 http://www.winblog.ru/category/news/rss.xml
 http://www.consultant.ru/rss/db.xml
-https://www.sport-express.ru/services/materials/news/se/
+http://feeds.bbci.co.uk/news/rss.xml
 https://www.sports.ru/rss/main.xml
-https://www.vedomosti.ru/rss/news
 https://rss.nytimes.com/services/xml/rss/nyt/World.xml
+https://moxie.foxnews.com/feedburner/latest.xml

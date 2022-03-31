@@ -10,8 +10,8 @@
 
     3. Логи
     В процессе работы нужно писать логи в консоль: лента обработана, статья скачена и т.д.  - done
-    
-    // TODO : После каждой итерации нужно выводить статистику: сколько лент обработано, сколько новых новостей, сколько старых.
+
+    После каждой итерации нужно выводить статистику: сколько лент обработано, сколько новых новостей, сколько старых. - done
 
 
     10 баллов
@@ -62,13 +62,22 @@ namespace news_portal {
         private FileLogger processed_article_writer = new FileLogger("processed_articles.txt");
         private FileLogger worker_logger = new FileLogger("logs.txt");
         private RSS_Reader rss_reader;
-        public Observer(int sleep_time = 1 * 60 * 1000) {
-            this.sleep_time = sleep_time;
+
+        private int old_articles = 0;
+        private int rss_lents_processed = 0;
+        private int new_articles = 0;
+        public Observer(int sleep_time = 1) {
+            this.sleep_time = sleep_time * 1000 * 60;
             this.rss_reader = new RSS_Reader();
         }
         public void Observe() {
             while (true) {
+                new_articles = 0;
+                old_articles = 0;
+                rss_lents_processed = 0;
                 UpdateNews();
+                worker_logger.Logging($"За текущую итерацию получено {new_articles} новых статей и {old_articles} старых статей. Всего обработано - {new_articles + old_articles} статей");
+                worker_logger.Logging($"За текущую итерацию обработано {rss_lents_processed} rss лент");
                 Thread.Sleep(this.sleep_time);
             }
         }
@@ -80,7 +89,6 @@ namespace news_portal {
                     if (str == null || str.Length == 0) {
                         break;
                     }
-                    // Console.WriteLine(str);
                     Task<int> task = new Task<int>(() => MethodForThread(str));
                     task.Start();
                     tasks.Add(task);
@@ -99,6 +107,7 @@ namespace news_portal {
                 // update article info
                     using (StreamReader reader = new StreamReader("processed_articles.txt")) {
                         bool is_processed = false;
+                        Monitor.Enter(_lock);
                         while (reader.Peek() >= 0) {
                             if (reader.ReadLine() == link) {
                                 is_processed = true;
@@ -106,12 +115,14 @@ namespace news_portal {
                             }
                         }
                         try {
-                            Monitor.Enter(_lock);
                             if (!is_processed) {
+                                    new_articles++;
                                     worker_logger.Logging("Появилась новая статья : " + link);
                                     processed_article_writer.Logging(link);
                                     ProcessUnprocessedArticle(link);
                                     worker_logger.Logging("Статья " + link + " скачана!");
+                            } else {
+                                old_articles++;
                             }
                         } finally {
                             Monitor.Exit(_lock);
@@ -119,12 +130,12 @@ namespace news_portal {
                         
                     }
             }
+            rss_lents_processed++;
             worker_logger.Logging("RSS лента " + url + " обработана!");
             return 0;
         }
-        // TODO: add atomic counters on new news
         async void ProcessUnprocessedArticle(string link) {
-            // TODO: process unprocessed_article
+            // process unprocessed_article
             Uri uri = new Uri(link);
             string path = $"./articles/{uri.Host}";
             
@@ -133,7 +144,7 @@ namespace news_portal {
                 try {
                     Directory.CreateDirectory(path);
                 } catch(Exception exc) {
-                    // TODO: logging
+                    worker_logger.Logging($"Перехвачено исключение: {exc.Message}");
                 } 
             }
             
@@ -144,7 +155,7 @@ namespace news_portal {
                     await web_client.DownloadFileTaskAsync(link, path + "/" + filename);
                 }
             } catch(Exception exc) {
-                // TODO
+                worker_logger.Logging($"Перехвачено исключение: {exc.Message}");
             } 
             
         } 
@@ -152,7 +163,7 @@ namespace news_portal {
    class Program {
 
         public static void Main (string[] args) {
-            Observer observer = new Observer(10000);
+            Observer observer = new Observer(2);
             observer.Observe();
         }
     }
