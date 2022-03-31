@@ -1,16 +1,17 @@
 ﻿/*
-    1. Подготовка
+    1. Подготовка - done
     Найти десяток новостных порталов с RSS лентой, записать их в файл. - done
 
-    2. Задание
+    2. Задание - done
     Раз в N минут нужно читать файл со списком адресов RSS лент (rss_list.txt), а так же файл со списоком уже обработанных ссылок (processed_articles.txt). - done
     Каждую RSS-ленту нужно скачать, распарсить, достать из неё список ссылок на новостные статьи. - done
-    По тем ссылкам, которые ещё не было ранее обработаны, нужно скачать html содержимое.
-    Содежимое нужно сохранить на диск, а так же записать в файл processed_articles.txt информацию о том что ссылка была обработана.
+    По тем ссылкам, которые ещё не было ранее обработаны, нужно скачать html содержимое. - done
+    Содежимое нужно сохранить на диск, а так же записать в файл processed_articles.txt информацию о том что ссылка была обработана. - done
 
     3. Логи
-    В процессе работы нужно писать логи в консоль: лента обработана, статья скачена и т.д. 
-    После каждой итерации нужно выводить статистику: сколько лент обработано, сколько новых новостей, сколько старых.
+    В процессе работы нужно писать логи в консоль: лента обработана, статья скачена и т.д.  - done
+    
+    // TODO : После каждой итерации нужно выводить статистику: сколько лент обработано, сколько новых новостей, сколько старых.
 
 
     10 баллов
@@ -121,8 +122,31 @@ namespace news_portal {
             worker_logger.Logging("RSS лента " + url + " обработана!");
             return 0;
         }
-        void ProcessUnprocessedArticle(string link) {
+        // TODO: add atomic counters on new news
+        async void ProcessUnprocessedArticle(string link) {
             // TODO: process unprocessed_article
+            Uri uri = new Uri(link);
+            string path = $"./articles/{uri.Host}";
+            
+            // create directory
+            if (!Directory.Exists(path)) {
+                try {
+                    Directory.CreateDirectory(path);
+                } catch(Exception exc) {
+                    // TODO: logging
+                } 
+            }
+            
+            // download
+            try {
+                using (WebClient web_client = new WebClient()) {
+                    string filename = link.Replace('/', '_') + ".html";
+                    await web_client.DownloadFileTaskAsync(link, path + "/" + filename);
+                }
+            } catch(Exception exc) {
+                // TODO
+            } 
+            
         } 
    }
    class Program {
