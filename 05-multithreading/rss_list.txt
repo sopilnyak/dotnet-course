@@ -1,0 +1,10 @@
+https://news.yahoo.com/rss/
+https://news.google.com/news/rss
+http://lenta.ru/rss/news
+https://www.globalissues.org/news/feed
+https://www.aljazeera.com/xml/rss/all.xml
+http://feeds.bbci.co.uk/news/world/rss.xml
+https://www.buzzfeed.com/world.xml
+http://feeds.washingtonpost.com/rss/world
+https://abcnews.go.com/abcnews/internationalheadlines
+https://www.cbsnews.com/latest/rss/world
