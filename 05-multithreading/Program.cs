@@ -96,8 +96,6 @@ namespace news_portal {
                 WebResponse response = request.GetResponse();
                 
                 // update article info
-                Monitor.Enter(_lock);
-                try {
                     using (StreamReader reader = new StreamReader("processed_articles.txt")) {
                         bool is_processed = false;
                         while (reader.Peek() >= 0) {
@@ -106,16 +104,19 @@ namespace news_portal {
                                 break;
                             }
                         }
-                        if (!is_processed) {
-                            worker_logger.Logging("Появилась новая статья : " + link);
-                            processed_article_writer.Logging(link);
-                            ProcessUnprocessedArticle(link);
-                            worker_logger.Logging("Статья " + link + " скачана!");
+                        try {
+                            Monitor.Enter(_lock);
+                            if (!is_processed) {
+                                    worker_logger.Logging("Появилась новая статья : " + link);
+                                    processed_article_writer.Logging(link);
+                                    ProcessUnprocessedArticle(link);
+                                    worker_logger.Logging("Статья " + link + " скачана!");
+                            }
+                        } finally {
+                            Monitor.Exit(_lock);
                         }
+                        
                     }
-                } finally {
-                    Monitor.Exit(_lock);
-                }
             }
             worker_logger.Logging("RSS лента " + url + " обработана!");
             return 0;
