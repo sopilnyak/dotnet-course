@@ -1,0 +1,10 @@
+https://lenta.ru/rss/news
+https://www.vedomosti.ru/rss/news
+https://www.rt.com/rss/
+https://www.rt.com/rss/russia/
+http://www.reddit.com/.rss
+https://twitter.com/statuses/user_timeline/elonmusk.rss
+https://www.youtube.com/feeds/videos.xml?channel_id=UCdxesVp6Fs7wLpnp1XKkvZg
+https://habr.com/ru/rss/all/all/?fl=ru
+https://www.youtube.com/feeds/videos.xml?channel_id=UC0teDXbT09EbXWiIVUhJ8Tg
+http://government.ru/all/rss/
