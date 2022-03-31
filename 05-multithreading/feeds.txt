@@ -1,0 +1,10 @@
+https://www.feedforall.com/sample.xml
+https://news.un.org/feed/subscribe/ru/audio-product/all/audio-rss.xml
+https://lenta.ru/rss
+http://rss.cnn.com/rss/edition.rss
+https://www.buzzfeed.com/lgbtq.xml
+https://lwlies.com/feed/
+https://screenrant.com/feed/
+http://static.feed.rbc.ru/rbc/logical/footer/news.rss
+https://lifehacker.com/rss
+https://www.politico.com/rss/politicopicks.xml
