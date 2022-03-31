@@ -1,9 +1,9 @@
 ﻿/*
     1. Подготовка
-    Найти десяток новостных порталов с RSS лентой, записать их в файл.
+    Найти десяток новостных порталов с RSS лентой, записать их в файл. - done
 
     2. Задание
-    Раз в N минут нужно читать файл со списком адресов RSS лент (rss_list.txt), а так же файл со списоком уже обработанных ссылок (processed_articles.txt).
+    Раз в N минут нужно читать файл со списком адресов RSS лент (rss_list.txt), а так же файл со списоком уже обработанных ссылок (processed_articles.txt). - done
     Каждую RSS-ленту нужно скачать, распарсить, достать из неё список ссылок на новостные статьи. - done
     По тем ссылкам, которые ещё не было ранее обработаны, нужно скачать html содержимое.
     Содежимое нужно сохранить на диск, а так же записать в файл processed_articles.txt информацию о том что ссылка была обработана.
@@ -66,7 +66,7 @@ namespace news_portal {
             this.rss_reader = new RSS_Reader();
         }
         public void Observe() {
-            while (True) {
+            while (true) {
                 UpdateNews();
                 Thread.Sleep(this.sleep_time);
             }
@@ -88,11 +88,13 @@ namespace news_portal {
             Task.WaitAll(tasks.ToArray());
         }
         int MethodForThread(string url) {
+            worker_logger.Logging("RSS лента " + url + " взята в обработку!");
             List<string> links = rss_reader.Read(url);
             foreach (string link in links) {
                 // save info about article
                 WebRequest request = WebRequest.Create(link);
                 WebResponse response = request.GetResponse();
+                
                 // update article info
                 Monitor.Enter(_lock);
                 try {
@@ -100,37 +102,33 @@ namespace news_portal {
                         bool is_processed = false;
                         while (reader.Peek() >= 0) {
                             if (reader.ReadLine() == link) {
-                                // Console.WriteLine("This article already processed, skipped it!");
                                 is_processed = true;
                                 break;
                             }
                         }
                         if (!is_processed) {
+                            worker_logger.Logging("Появилась новая статья : " + link);
                             processed_article_writer.Logging(link);
-                            // TODO: process unprocessed_article
-                            
+                            ProcessUnprocessedArticle(link);
+                            worker_logger.Logging("Статья " + link + " скачана!");
                         }
                     }
                 } finally {
                     Monitor.Exit(_lock);
                 }
             }
-            // Console.WriteLine(url + " potok ended!");
+            worker_logger.Logging("RSS лента " + url + " обработана!");
             return 0;
         }
         void ProcessUnprocessedArticle(string link) {
-                
+            // TODO: process unprocessed_article
         } 
    }
    class Program {
 
         public static void Main (string[] args) {
-            Observer observer = new Observer();
-            int count = 0;
-            while (count < 10) {
-                observer.UpdateNews();
-                Thread.Sleep(1000);
-            }
+            Observer observer = new Observer(10000);
+            observer.Observe();
         }
     }
 }
