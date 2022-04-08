@@ -1,9 +1,9 @@
-using Aspnet.Models;
+п»їusing Aspnet.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Здесь добавляем сторонние сервисы
+// Р—РґРµСЃСЊ РґРѕР±Р°РІР»СЏРµРј СЃС‚РѕСЂРѕРЅРЅРёРµ СЃРµСЂРІРёСЃС‹
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
