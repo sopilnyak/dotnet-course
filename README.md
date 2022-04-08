@@ -13,6 +13,8 @@
 [Лекция](https://drive.google.com/file/d/1A355mxg7B5fqQHVvVa9XsNApgvF0D2jo/view?usp=sharing) [Домашнее задание №2](05-multithreading)
 6. Тестирование
 [Лекция](https://drive.google.com/file/d/1OXSGY2tKEQgdoQGeRoqGLJvoalB8bQm7/view?usp=sharing) [Семинар](06-testing) [Домашнее задание №3](06-testing/Task.cs)
+6. ASP.NET
+[Лекция](https://drive.google.com/file/d/1G42SbD4So_SWovtgDzmFyUrgXJ4Nkouy/view?usp=sharing) [Семинар](08-aspnet)
 
 ## Правила сдачи заданий
 1. Сделать форк репозитория
