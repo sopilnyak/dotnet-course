@@ -13,7 +13,10 @@ namespace Homework3
 
         private static IHostBuilder CreateHostBuilder() =>
             Host.CreateDefaultBuilder()
-                .ConfigureServices((_, services) => services.AddHostedService<Worker>()
-                    .AddScoped<IMessageWriter, MessageWriter>());
+                .ConfigureServices((_, services) => 
+                    services.AddScoped(
+                        typeof(IBatchIterator<>), 
+                        typeof(BatchIterator<>)
+                    ));
     }
 }
