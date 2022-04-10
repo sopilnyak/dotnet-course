@@ -1,7 +1,7 @@
 using NUnit.Framework;
-using Homework3.BatchIterator;
+using Homework3.Task1;
 
-namespace Homework3.Tests
+namespace Homework3.Task1Tests
 {
     public class BatchIteratorTests
     {
@@ -15,11 +15,8 @@ namespace Homework3.Tests
         public void TestBasics<T>(T[] data_to_batch, int batch_size)
         {
             var data_iterator = data_to_batch.GetEnumerator();
-
-            var batch_iterator_generator = new BatchIterator<T>(batch_size);
-            IEnumerable<T> enumerable_data = data_to_batch;
-            var batch_iterator = batch_iterator_generator
-                                 .Iterate(enumerable_data)
+            var batch_iterator = data_to_batch
+                                 .IterateBatches(batch_size)
                                  .GetEnumerator();
 
             if (!batch_iterator.MoveNext())
@@ -50,15 +47,6 @@ namespace Homework3.Tests
             }
 
             Assert.False(data_iterator.MoveNext());
-        }
-
-        [TestCase(new int[] { 1, 2, 3, 4, 5, 6, 7 }, 3)]
-        public void TestBatchSizeNotChanged(int[] data_to_batch, int batch_size)
-        {
-            var batch_iterator_generator = new BatchIterator<int>(batch_size);
-            IEnumerable<int> enumerable_data = data_to_batch;
-            foreach (var batch in batch_iterator_generator.Iterate(enumerable_data)) ;
-            Assert.AreEqual(batch_iterator_generator.BatchSize, batch_size);
         }
     }
 }

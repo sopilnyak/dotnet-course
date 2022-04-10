@@ -1,18 +1,13 @@
 using System;
 using System.Collections.Generic;
 
-namespace Homework3.BatchIterator
+namespace Homework3.Task1
 {
-    public class BatchIterator<T> : IBatchIterator<T>
+    // Решил сделать единственный статичный метод, поэтому класс не шаблонный
+    public static class BatchIterator
     {
-        public int BatchSize { get; set; }
-
-        public BatchIterator(int batch_size)
-        {
-            BatchSize = batch_size;
-        }
-
-        public IEnumerable<T[]> Iterate(IEnumerable<T> data_to_batch)
+        public static IEnumerable<T[]> IterateBatches<T>(
+            this IEnumerable<T> data_to_batch, int batch_size)
         {
             T[] batch = null;
             int current_size = 0;
@@ -21,12 +16,12 @@ namespace Homework3.BatchIterator
             {
                 if (batch == null)
                 {
-                    batch = new T[BatchSize];
+                    batch = new T[batch_size];
                 }
 
                 batch[current_size++] = item;
 
-                if (current_size == BatchSize)
+                if (current_size == batch_size)
                 {
                     yield return batch;
 
