@@ -84,3 +84,4 @@ public class BatchIterator<T> : IEnumerable<IEnumerable<T>>
         return GetEnumerator();
     }
 }
+
