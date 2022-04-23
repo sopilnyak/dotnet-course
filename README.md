@@ -16,6 +16,13 @@
 7. Базы данных. ORM.
 8. ASP.NET
 [Лекция](https://drive.google.com/file/d/1G42SbD4So_SWovtgDzmFyUrgXJ4Nkouy/view?usp=sharing) [Семинар](08-aspnet)
+9. Введение в cloud
+[Лекция](https://drive.google.com/file/d/15OE4nBZnCypv8GHGoMN_g8dSSwNN3u0y/view?usp=sharing)
+10. CI/CD
+
+## Проект
+Реализовать веб-приложение, с помощью которого можно применить нейросеть к загруженной картинке по API.
+[Подробное условие](https://docs.google.com/document/d/1dWID8o8qxjwKV1VCRj15tSfm_9X_ue8H-R_fsHSmhWk)
 
 ## Правила сдачи заданий
 1. Сделать форк репозитория
