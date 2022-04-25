@@ -6,6 +6,7 @@
     <RootNamespace>OOP</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GenerateProgramFile>false</GenerateProgramFile>
   </PropertyGroup>
 
 </Project>
