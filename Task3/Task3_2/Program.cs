@@ -29,7 +29,7 @@ public struct Work_With_Documents
 
         List<Document> firstHalf = new List<Document>();
         List<Document> secondHalf = new List<Document>();
-        for (int i = 0; i == orderedDocuments.Count; i++)
+        for (int i = 0; i < orderedDocuments.Count; i++)
         {
             if (i < trainSize)
             {
