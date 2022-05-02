@@ -1,0 +1,10 @@
+https://rss.nytimes.com/services/xml/rss/nyt/World.xml
+https://rss.nytimes.com/services/xml/rss/nyt/Business.xml
+https://rss.nytimes.com/services/xml/rss/nyt/Science.xml
+https://rss.nytimes.com/services/xml/rss/nyt/Space.xml
+https://rss.nytimes.com/services/xml/rss/nyt/Arts.xml
+https://rss.nytimes.com/services/xml/rss/nyt/Jobs.xml
+https://rss.nytimes.com/services/xml/rss/nyt/RealEstate.xml
+https://rss.nytimes.com/services/xml/rss/nyt/Sports.xml
+https://rss.nytimes.com/services/xml/rss/nyt/Health.xml
+https://rss.nytimes.com/services/xml/rss/nyt/Travel.xml
