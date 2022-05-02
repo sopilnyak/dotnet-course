@@ -1,11 +1,13 @@
 using NUnit.Framework;
 namespace Testing.Tests;
 
-public class SplitTrainTester {
+public class SplitTrainTester
+{
     [TestCase(0.2)]
     [TestCase(0.3)]
     [TestCase(0.7)]
-    public void TestSplit(double train_len) {
+    public void TestSplit(double trainLen)
+    {
         var docs = new Document[]{
             new Document("a", new DateTime(2022, 4, 24, 0, 0, 0), "name"),
             new Document("b", new DateTime(2022, 4, 24, 0, 0, 1), "name"),
@@ -19,11 +21,11 @@ public class SplitTrainTester {
             new Document("j", new DateTime(2022, 4, 24, 0, 0, 9), "name"),
         };
 
-        var (train, test) = DocumentSplitter.SplitTrainTest(docs, train_len);
-        Assert.AreEqual(Convert.ToInt32(Math.Floor(train_len * docs.Length)), train.Count);
-        Assert.AreEqual(docs.Length - Convert.ToInt32(Math.Floor(train_len * docs.Length)), test.Count);
+        var (train, test) = DocumentSplitter.SplitTrainTest(docs, trainLen);
+        Assert.AreEqual(Convert.ToInt32(Math.Floor(trainLen * docs.Length)), train.Count);
+        Assert.AreEqual(docs.Length - Convert.ToInt32(Math.Floor(trainLen * docs.Length)), test.Count);
         var res = train.Concat(test).ToArray();
-        
+
         Assert.True(res.Length == docs.Length);
         Assert.True(res.All(docs.Contains));
         Assert.True(docs.All(res.Contains));
