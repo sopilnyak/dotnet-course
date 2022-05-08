@@ -19,6 +19,8 @@
 9. Введение в cloud
 [Лекция](https://drive.google.com/file/d/15OE4nBZnCypv8GHGoMN_g8dSSwNN3u0y/view?usp=sharing)
 10. CI/CD
+11. Docker и Kubernetes
+[Лекция](https://drive.google.com/file/d/1kGh2xt0ait8FQl-4FaSPtx5FFVT7Ja0T/view?usp=sharing) [Семинар](11-docker)
 
 ## Проект
 Реализовать веб-приложение, с помощью которого можно применить нейросеть к загруженной картинке по API.
