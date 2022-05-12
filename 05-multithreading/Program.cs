@@ -17,3 +17,13 @@
     Мягкий дедлайн: 31.03.2022 23:59
     Жесткий дедлайн: 12.05.2022 23:59
 */
+
+static class Program
+{
+
+    static void Main(string[] args)
+    {
+        // LoggerFlag.All чтобы были видны скачки отдельных страниц
+        NewsUpdater.UpdateLoop(LoggerFlag.Important | LoggerFlag.Feeds).Wait(); 
+    }
+}
