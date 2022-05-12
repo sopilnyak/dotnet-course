@@ -14,7 +14,7 @@ namespace Testing.HW3
         [TestCase(new int[] {}, 3, true)]
         [TestCase(new int[] {1, 2, 3, 4, 5, 6, 7, 8}, 9, true)]
         [TestCase(new int[] {1, 2, 3, 4, 5, 6, 7, 8}, 1, true)]
-        [TestCase(new String[] {"boogy-woogy", "Arra", "a", "aboba",  "dsfdgas"}, 3, false)]
+        [TestCase(new String[] {"a", "b", "c", "d", "e"}, 3, false)]
         public void BatchTest<T>(IEnumerable<T> data, int batchSize, bool dropLast)
         {
             var enumerable = data.ToList();
