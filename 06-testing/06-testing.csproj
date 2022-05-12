@@ -6,6 +6,7 @@
     <RootNamespace>Testing</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <StartupObject>Testing.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
