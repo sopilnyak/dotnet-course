@@ -1,0 +1,11 @@
+﻿https://news.ru/rss/
+http://tass.ru/rss/v2.xml
+https://www.themoscowtimes.com/rss/news
+https://www.rt.com/rss/
+https://vm.ru/rss
+https://ria.ru/export/rss2/index.xml?page_type=google_newsstand
+http://tass.ru/rss/v2.xml
+https://www.vedomosti.ru/rss/news
+https://www.mk.ru/rss/index.xml
+https://russian.rt.com/rss
+https://ria.ru/export/rss2/archive/index.xml
