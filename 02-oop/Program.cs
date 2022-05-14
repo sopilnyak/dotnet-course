@@ -1,17 +1,4 @@
-﻿/*
-    Нужно реализовать систему классов и интерфейсов, которая умеет сортировать массив объектов любого типа (см. интерфейс IComparable).
-    
-    Требования:
-     - Поддержка минимум двух алгоритмов сортировки.
-     - Выбор алгоритма сортировки на основании исходного массива (ради упрощения, выбирать алгоритм можно учитывая количество элементов).
-     - Логгирование хода работы программы: «получен массив из N элементов», «выбран алгоритм K», «отсортировано за M времени».
-     - Поддержка настройки механизма логгирования: в консоль и/или на диск.
-
-    10 баллов
-    Мягкий дедлайн: 10.03.2022 23:59
-    Жесткий дедлайн: 12.05.2022 23:59
-*/
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 
@@ -50,22 +37,27 @@ namespace Homework1
         {
             Console.WriteLine("Where to write logs [f]ile/[c]onsole");
             string input = Console.ReadLine();
-            bool is_infile = input[0] == 'f' ? true : false;
+            ILogger logger;
+            if(input[0] == 'f') {
+                logger = new FileLogger();
+            } else {
+                logger = new ConsoleLogger();
+            }
 
             File.Delete("logs.txt");
             string[] randomStrings1 = generateArrayOfString(400);
-            SelectAlgorithm.SelectSort(randomStrings1, is_infile);
+            SelectAlgorithm.SelectSort(randomStrings1, logger);
             string[] randomStrings2 = generateArrayOfString(50000);
-            SelectAlgorithm.SelectSort(randomStrings2, is_infile);
+            SelectAlgorithm.SelectSort(randomStrings2, logger);
 
             int[] randomNumbers1 = generateArray(80000);
-            SelectAlgorithm.SelectSort(randomNumbers1, is_infile);
+            SelectAlgorithm.SelectSort(randomNumbers1, logger);
             int[] randomNumbers2 = generateArray(123200);
-            SelectAlgorithm.SelectSort(randomNumbers2, is_infile);
+            SelectAlgorithm.SelectSort(randomNumbers2, logger);
             int[] randomNumbers3 = generateArray(1300000);
-            SelectAlgorithm.SelectSort(randomNumbers3, is_infile);
+            SelectAlgorithm.SelectSort(randomNumbers3, logger);
             int[] randomNumbers4 = generateArray(6000000);
-            SelectAlgorithm.SelectSort(randomNumbers4, is_infile);
+            SelectAlgorithm.SelectSort(randomNumbers4, logger);
         }
     }
 }

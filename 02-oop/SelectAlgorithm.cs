@@ -7,15 +7,15 @@ namespace Homework1
     public class SelectAlgorithm
     {
         
-        public static void SelectSort<T>(T[] arr, bool is_infile) where T : IComparable
+        public static void SelectSort<T>(T[] arr, ILogger logger) where T : IComparable
         {
             ISorter parser;
             if (arr.Length <= 500)
             {
                 parser = new BubbleSort();
-                Log.StartLog(arr, "BubbleSort", is_infile);
+                Timer.StartLog(arr, "BubbleSort", logger);
                 parser.Sort(arr);
-                Log.EndLog(arr, is_infile);
+                Timer.EndLog(arr, logger);
             }
             else
             { // measure accuracy of sorted subarrays
@@ -33,16 +33,16 @@ namespace Homework1
                 if (accuracy > 0.5 && arr.Length < 200000)
                 {
                     parser = new ShellSort();
-                    Log.StartLog(arr, "ShellSort", is_infile);
+                    Timer.StartLog(arr, "ShellSort", logger);
                     parser.Sort(arr);
-                    Log.EndLog(arr, is_infile);
+                    Timer.EndLog(arr, logger);
                 }
                 else
                 {
                     parser = new MergeSort();
-                    Log.StartLog(arr, "MergeSort", is_infile);
+                    Timer.StartLog(arr, "MergeSort", logger);
                     parser.Sort(arr);
-                    Log.EndLog(arr, is_infile);
+                    Timer.EndLog(arr, logger);
                 }
             }
         }
