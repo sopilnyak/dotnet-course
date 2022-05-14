@@ -2,7 +2,7 @@
 
 using Solution;
 
-class Program
+public static class Program
 {
     public static async Task Main()
     {
