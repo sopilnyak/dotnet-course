@@ -1,0 +1,10 @@
+https://lenta.ru/rss/news
+https://vedomosti.ru/rss/news
+https://knife.media/feed/
+https://elementy.ru/rss/news/it
+https://news.rambler.ru/rss/technology/
+https://gq.com/feed/rss
+https://nytimes.com/svc/collections/v1/publish/https://www.nytimes.com/section/world/rss.xml
+https://rss.stopgame.ru/rss_news.xml
+https://buzzfeed.com/world.xml
+https://rt.com/rss/news/
