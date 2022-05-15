@@ -4,14 +4,19 @@ namespace Testing.Solution;
 
 public class BatchIterator<T> : IEnumerable<IEnumerable<T>>
 {
-    private readonly IEnumerable<T> _data;
+    private readonly IList<T> _data;
     private readonly int _dataSize;
     private readonly int _batchSize;
 
     public BatchIterator(IEnumerable<T> data, int batchSize)
     {
-        _data = data;
-        _dataSize = _data.Count();
+        if (batchSize <= 0)
+        {
+            throw new ArgumentException("Failed to create BatchIterator: batch size must be greater than 0");
+        }
+
+        _data = data.ToList();
+        _dataSize = _data.Count;
         _batchSize = batchSize;
     } 
 
