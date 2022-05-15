@@ -15,7 +15,7 @@ public class DateTimeTests
         var datePlusWeek = date.Add(weekSpan);
 
         // Assert: проверка результата
-        Assert.AreEqual(new DateTime(2022, 3, 30), datePlusWeek);
+        Assert.AreEqual(new DateTime(2022, 3, 31), datePlusWeek);
     }
 
     [TestCase(2022, 3, 24, "2022-03-24")]
