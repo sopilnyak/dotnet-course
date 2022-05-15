@@ -7,22 +7,29 @@ public class RssReader
 
     private bool _stopped;
 
+    private HashSet<string> _processedArticlesLinks = null!;
+
     public RssReader(string rssFilepath, string processedFilepath, string saveDirPath) =>
         _fileManager = new FileManager(rssFilepath, processedFilepath, saveDirPath);
+    
+    private async Task ProcessArticle(ArticleInfo info)
+    {
+        var html = await _client.DownloadArticle(info);
+        await _fileManager.SaveArticle(info, html);
+    }
+
+    private async Task ProcessRss(RssInfo rssInfo)
+    {
+        var xml = await _client.DownloadRss(rssInfo);
+        var newArticlesInfo = RssXmlParser.GetNewArticlesInfo(rssInfo, xml, _processedArticlesLinks);
+        await Task.WhenAll(newArticlesInfo.Select(ProcessArticle));
+        _fileManager.SaveToProcessed(newArticlesInfo);
+    }
 
     private void Read()
     {
-        var processedArticlesLinks = _fileManager.ReadProcessedArticlesLinks();
-
-        Task.WhenAll(_fileManager.ReadRssInfo().Select(rssInfo =>
-            _client.DownloadRss(rssInfo)
-                .ContinueWith(task =>
-                    Task.WhenAll(
-                        RssXmlParser.GetNewArticlesInfo(rssInfo, task.Result, processedArticlesLinks)
-                            .Select(info =>
-                                _client.DownloadArticle(info)
-                                    .ContinueWith(httpTask => _fileManager.SaveArticle(info, httpTask.Result))
-                                    .ContinueWith(_ => _fileManager.SaveToProcessed(info))))))).Wait();
+        _processedArticlesLinks = _fileManager.ReadProcessedArticlesLinks();
+        Task.WhenAll(_fileManager.ReadRssInfo().Select(ProcessRss)).Wait();
         Console.WriteLine("All articles have been successfully processed and saved");
     }
 

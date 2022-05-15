@@ -10,25 +10,17 @@ internal class Downloader
             "cookie", /*add your cookie from browser here, because otherwise 403 is returned*/"");
     }
 
-    internal Task<string> DownloadRss(RssInfo info)
+    internal async Task<string> DownloadRss(RssInfo info)
     {
-        return _client.GetStringAsync(info.Link)
-            .ContinueWith(httpTask =>
-                {
-                    Logger.LogFeedDownloaded(info.GetFeedName());
-                    return httpTask.Result;
-                }
-            );
+        var xml = await _client.GetStringAsync(info.Link);
+        Logger.LogFeedDownloaded(info.GetFeedName());
+        return xml;
     }
 
-    internal Task<string> DownloadArticle(ArticleInfo articleInfo)
+    internal async Task<string> DownloadArticle(ArticleInfo articleInfo)
     {
-        return _client.GetStringAsync(articleInfo.Link)
-            .ContinueWith(httpTask =>
-                {
-                    Logger.LogArticleDownloaded(articleInfo.Title);
-                    return httpTask.Result;
-                }
-            );
+        var html = await _client.GetStringAsync(articleInfo.Link);
+        Logger.LogArticleDownloaded(articleInfo.Title);
+        return html;
     }
 }

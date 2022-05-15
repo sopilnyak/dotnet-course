@@ -21,19 +21,22 @@ internal class FileManager
 
     internal HashSet<string> ReadProcessedArticlesLinks() => File.ReadAllLines(_processedFilepath).ToHashSet();
 
-    internal void SaveToProcessed(ArticleInfo info)
+    internal void SaveToProcessed(IEnumerable<ArticleInfo> infos)
     {
         lock (_processedFilepath)
         {
-            File.AppendAllText(_processedFilepath, info.Link + Environment.NewLine);
+            File.AppendAllText(_processedFilepath, string.Join(Environment.NewLine, infos.Select(info => info.Link)));
         }
 
-        Logger.LogArticleSavedToProcessed(info.Title);
+        foreach (var info in infos)
+        {
+            Logger.LogArticleSavedToProcessed(info.Title);
+        }
     }
 
-    internal Task SaveArticle(ArticleInfo info, string contents)
+    internal async Task SaveArticle(ArticleInfo info, string contents)
     {
-        return File.WriteAllTextAsync(Path.Combine(_saveDirPath, $"{info.Title}.html"), contents)
-            .ContinueWith(_ => Logger.LogArticleSaved(info.Title));
+        await File.WriteAllTextAsync(Path.Combine(_saveDirPath, $"{info.Title}.html"), contents);
+        Logger.LogArticleSaved(info.Title);
     }
 }
