@@ -12,96 +12,8 @@
     Жесткий дедлайн: 12.05.2022 23:59
 */
 
-using logger;
-using sorts;
-
-namespace logger {
-    public interface ILogger {
-        public void Log(string msg);
-    }
-
-    public class ConsoleLogger : ILogger {
-        public ConsoleLogger() { }
-
-        public void Log(string msg) {
-            Console.WriteLine(msg);
-        }
-    }
-
-    public class FileLogger : ILogger {
-        public FileLogger(string filename) {
-            _filename = filename;
-        }
-
-        public void Log(string msg) {
-            using var file = new StreamWriter(_filename, true);
-            file.WriteLine(msg);
-        }
-
-        private readonly string _filename;
-    }
-
-    public class NoLogger : ILogger {
-        public NoLogger() { }
-        public void Log(string msg) { }
-    }
-}
-
-namespace sorts {
-    interface ISorter<T> {
-        void Sort(T[] arr);
-    }
-
-    public class BubbleSort<T> : ISorter<T> where T: IComparable {
-        public BubbleSort() { }
-
-        public void Sort(T[] arr) {
-            var swapped = true;
-
-            while (swapped) {
-                swapped = false;
-                for (var i = 0; i < arr.Length - 1; ++i) {
-                    if (arr[i].CompareTo(arr[i + 1]) <= 0) continue;
-                    (arr[i], arr[i + 1]) = (arr[i + 1], arr[i]);
-                    swapped = true;
-                }
-            }
-        }
-    }
-
-    public class QuickSort<T> : ISorter<T> where T: IComparable {
-        public QuickSort() {}
-
-        public void Sort(T[] arr) {
-            QuickSortRecursion(arr, 0, arr.Length - 1);
-        }
-
-        private int Partition(T[] arr, int start_idx, int end_idx) {
-            T pivot = arr[end_idx];
-
-            var real_pivot_idx = start_idx - 1;
-            
-            for (var i = start_idx; i <= end_idx - 1; ++i) {
-                if (arr[i].CompareTo(pivot) < 0) {
-                    ++real_pivot_idx;
-                    (arr[real_pivot_idx], arr[i]) = (arr[i], arr[real_pivot_idx]);
-                }
-            }
-
-            (arr[real_pivot_idx + 1], arr[end_idx]) = (arr[end_idx], arr[real_pivot_idx + 1]);
-            return real_pivot_idx + 1;
-        }
-        
-        private void QuickSortRecursion(T[] arr, int start_idx, int end_idx) {
-            if (start_idx >= end_idx) {
-                return;
-            }
-            int new_parts = Partition(arr, start_idx, end_idx);
-            QuickSortRecursion(arr, start_idx, new_parts - 1);
-            QuickSortRecursion(arr, new_parts + 1, end_idx);
-        }
-    }
-}
+using loggers;
+using sorters;
 
 namespace oop {
     public class Cat: IComparable {
@@ -114,7 +26,7 @@ namespace oop {
             if (obj is Cat cat) {
                 return Weight.CompareTo(cat.Weight);
             }
-            throw new ArgumentException("Сравнивание несравнимых типов");
+            throw new ArgumentException("Объект не является типом Cat");
         }
         public string Name { get; }
         public int Weight { get; }
@@ -123,38 +35,35 @@ namespace oop {
     public class SortedArrayWithLogger<T> where T : IComparable {
         public SortedArrayWithLogger(T[] arr, ILogger logger) {
             _logger = logger;
-            this.arr = arr;
+            Arr = arr;
             _logger.Log($"Получен массив из {arr.Length} элементов");
         }
 
         public void Sort() {
             var watch = new System.Diagnostics.Stopwatch();
-            if (arr.Length < _limit_on_items) {
+            if (Arr.Length < LimitOnItems) {
                 _logger.Log("Выбран алгоритм сортировки пузырьком");
-                BubbleSort<T> bubbleSort = new BubbleSort<T>();
+                var bubbleSort = new BubbleSort<T>();
                 watch.Start();
-                bubbleSort.Sort(arr);
+                bubbleSort.Sort(Arr);
                 watch.Stop();
             }
             else {
                 _logger.Log("Выбран алгоритм быстрой сортировки");
-                QuickSort<T> quickSort = new QuickSort<T>();
+                var quickSort = new QuickSort<T>();
                 watch.Start();
-                quickSort.Sort(arr);
+                quickSort.Sort(Arr);
                 watch.Stop();
             }
 
-            if (watch.Elapsed.Ticks <= 10000) {
-                _logger.Log($"Отсортировано за {watch.Elapsed.Ticks / 10} микросекунд");
-            }
-            else {
-                _logger.Log($"Отсортировано за {watch.Elapsed.Milliseconds} миллисекунд");
-            }
+            _logger.Log(watch.Elapsed.Ticks <= 10000
+                ? $"Отсортировано за {watch.Elapsed.Ticks / 10} микросекунд"
+                : $"Отсортировано за {watch.Elapsed.Milliseconds} миллисекунд");
         }
 
-        private logger.ILogger _logger;
-        public T[] arr { get; }
-        private const int _limit_on_items = 20;
+        private ILogger _logger;
+        public T[] Arr { get; }
+        private const int LimitOnItems = 20;
     }
     public class Program {
         public static void TestCats() {
@@ -170,11 +79,11 @@ namespace oop {
             logger.Log("Test on IComparable type");
             logger.Log("==================================");
 
-            var sorted_arr = new SortedArrayWithLogger<Cat>(cats, logger);
+            var sortedArr = new SortedArrayWithLogger<Cat>(cats, logger);
             
-            sorted_arr.Sort();
+            sortedArr.Sort();
 
-            foreach (var cat in sorted_arr.arr) {
+            foreach (var cat in sortedArr.Arr) {
                 logger.Log($"Name: {cat.Name}, Weight: {cat.Weight}");
             }
             logger.Log("==================================");
@@ -199,13 +108,13 @@ namespace oop {
             logger.Log("Test on large amount of elements");
             logger.Log("==================================");
 
-            var sorted_arr = new SortedArrayWithLogger<int>(arr, logger);
+            var sortedArr = new SortedArrayWithLogger<int>(arr, logger);
             
-            sorted_arr.Sort();
+            sortedArr.Sort();
 
-            var item = sorted_arr.arr[0];
+            var item = sortedArr.Arr[0];
             
-            foreach (var elem in sorted_arr.arr) {
+            foreach (var elem in sortedArr.Arr) {
                 if (item > elem) {
                     logger.Log("==================================");
                     logger.Log("Test FAILED! Reason: Array is not sorted!");
