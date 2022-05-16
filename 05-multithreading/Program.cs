@@ -21,13 +21,13 @@
 using System.Runtime.InteropServices.ComTypes;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
-using Util;
+using util;
 
 namespace _05_multithreading;
 
 public static class EventLoop
 {
-    private static readonly Logger Logger = new(LogDst.Console);
+    private static readonly ConsoleLogger Logger = new();
     private static Stats _stats = new();
     private static System.Threading.Timer? _timer;
     private const int PeriodMs = 60000;
