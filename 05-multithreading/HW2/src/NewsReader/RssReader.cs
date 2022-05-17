@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,10 +16,12 @@ namespace TASK3.src.NewsReader
         public String ProcessedPath { get; set; }
         public String ContentSource { get; set; }
 
+        public List<Task> feedTasks = new List<Task>();
+
 
         private readonly String _projectRootPath = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
         private List<String> rssFeedsLinks;
-        private HashSet<String> processedLinks = new HashSet<string>();
+        public HashSet<String> processedLinks = new HashSet<string>();
 
         private readonly String _htmlFileDir = "resources\\rssClient\\htmls\\html_";
 
@@ -83,12 +86,20 @@ namespace TASK3.src.NewsReader
 
         public void ParseRssFile()
         {
-            List<String> allLinks = new List<string>();
-            rssFeedsLinks.ForEach(feed => {
-                allLinks.AddRange(ReadArticleLinks(feed));
-                log.Info(String.Format("Parsed feed {0}", feed));
+            rssFeedsLinks.ForEach(feed =>
+            {
+                Task<List<String>> feedTask = Task.Factory.StartNew(() => ReadArticleLinks(feed));
+                log.Info("Add to list the task");
+                feedTasks.Add(feedTask);
+
             });
-            log.Info(String.Format("Finsihed parsing {0}", RssListPath.Split('\\').Last()));
+
+            Task.WaitAll(feedTasks.ToArray());
+
+            string filePath = Path.Combine(_projectRootPath, ProcessedPath);
+            StreamWriter writer = new StreamWriter(filePath, true);
+            processedLinks.ToList().ForEach((link) => writer.Write(link + '\n'));
+            writer.Close();
         }
 
         private void SaveHtmlOnDisk(String res)
@@ -137,7 +148,8 @@ namespace TASK3.src.NewsReader
 
         private List<String> ReadArticleLinks(String feedURL)
         {
-            List<String> articleLinks = new List<string>();
+            log.Info(String.Format("Started parsing feed {0}", feedURL));
+            List <String> articleLinks = new List<string>();
 
             XmlDocument rssXmlDoc = new XmlDocument();
             try
@@ -156,6 +168,8 @@ namespace TASK3.src.NewsReader
             XmlNodeList rssNodes = rssXmlDoc.SelectNodes("rss/channel/item");
 
             StringBuilder rssContent = new StringBuilder();
+            List<Task> articleTasks = new List<Task>();
+
             int i = 0;
 
             foreach (XmlNode rssNode in rssNodes)
@@ -172,32 +186,37 @@ namespace TASK3.src.NewsReader
                 }
                 else
                 {
-                    newArticles++;
-                    string filePath = Path.Combine(_projectRootPath, ProcessedPath);
-
-                    StreamWriter writer = new StreamWriter(filePath, true);
-                    writer.Write(link + '\n');
-                    writer.Close();
-                    log.Info(String.Format("Added news article URL {0}", link));
-
-                    String parsedHtml = this.TakeHtmlFromLink(link);
-
-                    log.Info(String.Format("Downloaded news article html at URL {0}", link));
-
-
-                    if (!parsedHtml.Equals(""))
+                    Task articleTask = Task.Factory.StartNew(() =>
                     {
-                        SaveHtmlOnDisk(parsedHtml);
-                        log.Info(String.Format("Saved on disk news article html at URL {0}", link));
-                    } else
-                    {
-                        log.Info(String.Format("Ignored empty news article html at URL {0}", link));
+                        newArticles++;
 
-                    }
+                        log.Info(String.Format("Added news article URL {0}", link));
+
+                        String parsedHtml = this.TakeHtmlFromLink(link);
+
+                        log.Info(String.Format("Downloaded news article html at URL {0}", link));
+
+
+                        if (!parsedHtml.Equals(""))
+                        {
+                            SaveHtmlOnDisk(parsedHtml);
+                            log.Info(String.Format("Saved on disk news article html at URL {0}", link));
+                        }
+                        else
+                        {
+                            log.Info(String.Format("Ignored empty news article html at URL {0}", link));
+
+                        }
+                    });
+
+                    articleTasks.Add(articleTask);
 
                 }
 
             }
+            Task.WaitAll(articleTasks.ToArray());
+            log.Info(String.Format("Finished parsing feed {0}", feedURL));
+
             return articleLinks;
 
         }
