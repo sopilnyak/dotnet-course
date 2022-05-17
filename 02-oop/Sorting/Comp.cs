@@ -32,9 +32,7 @@ public class Comp<T> where T : IComparable
     {
         var stopWatch = new Stopwatch();
         stopWatch.Start();
-        ////////
         sorter.Sort(_items);
-        ////////
         stopWatch.Stop();
         // Get the elapsed time as a TimeSpan value.
         TimeSpan ts = stopWatch.Elapsed;
