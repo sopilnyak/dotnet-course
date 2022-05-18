@@ -10,7 +10,7 @@ public class Document
     {
         if (trainSize is >= 0 and <= 1)
         {
-            throw new ArgumentException("trainSize " + trainSize + " must between 0 and 1");
+            throw new ArgumentException($"{nameof(trainSize)} {trainSize} must between 0 and 1");
         }
         
         var sortedDocuments = documents
