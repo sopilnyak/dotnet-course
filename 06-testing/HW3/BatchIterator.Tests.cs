@@ -27,8 +27,8 @@ public class TestBatchIterator
     [TestCase(new[] { 1, 2, 3, 4 }, 5, false)]
     [TestCase(new int[] { }, 3, true)]
     [TestCase(new int[] { }, 3, false)]
-    [TestCase(new string[] { "1", "2", "3", "4", "5" }, 2, true)]
-    [TestCase(new string[] { "1", "2", "3", "4", "5" }, 2, false)]
+    [TestCase(new [] { "1", "2", "3", "4", "5" }, 2, true)]
+    [TestCase(new [] { "1", "2", "3", "4", "5" }, 2, false)]
     public void BatchSizeTest<T>(IEnumerable<T> data, int batchSize, bool dropLast)
     {
         var dataList = data.ToList();
@@ -52,8 +52,8 @@ public class TestBatchIterator
     [TestCase(new[] { 1, 2, 3, 4 }, 5, false)]
     [TestCase(new int[] { }, 3, true)]
     [TestCase(new int[] { }, 3, false)]
-    [TestCase(new string[] { "1", "2", "3", "4", "5" }, 2, true)]
-    [TestCase(new string[] { "1", "2", "3", "4", "5" }, 2, false)]
+    [TestCase(new [] { "1", "2", "3", "4", "5" }, 2, true)]
+    [TestCase(new [] { "1", "2", "3", "4", "5" }, 2, false)]
     public void BatchDataTest<T>(IEnumerable<T> data, int batchSize, bool dropLast)
     {
         var dataList = data.ToList();
@@ -74,5 +74,19 @@ public class TestBatchIterator
 
             ++batchIndex;
         }
+    }
+    
+    [TestCase(new[] { 1, 2}, 0, true)]
+    [TestCase(new[] { 1, 2}, 0, false)]
+    [TestCase(new[] { 1, 2}, -1, true)]
+    [TestCase(new[] { 1, 2}, -1, false)]
+    [TestCase(new int[] {}, 0, true)]
+    [TestCase(new int[] {}, 0, false)]
+    [TestCase(new int[] {}, -1, true)]
+    [TestCase(new int[] {}, -1, false)]
+    public void InvalidBatchSizeTest<T>(IEnumerable<T> data, int batchSize, bool dropLast)
+    {
+        var dataList = data.ToList();
+        Assert.Throws<ArgumentException>(() => new BatchIterator<T>(dataList, batchSize, dropLast));
     }
 }

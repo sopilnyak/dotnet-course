@@ -10,6 +10,11 @@ public class BatchIterator<T> : IEnumerable<IEnumerable<T>>
 
     public BatchIterator(IEnumerable<T> data, int batchSize, bool dropLast = true)
     {
+        if (batchSize <= 0)
+        {
+            throw new ArgumentException("Batch size must be grater than 0");
+        }
+        
         _data = data;
         _batchSize = batchSize;
         _dropLast = dropLast;
