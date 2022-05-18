@@ -6,7 +6,7 @@ public class Document
     public DateTime CreatedUtc { get; init; }
     public string ClassName { get; init; }
 
-    public (List<Document>, List<Document>) SplitTrainTest(List<Document> documents, double trainSize, int? seed = null)
+    public static (List<Document>, List<Document>) SplitTrainTest(List<Document> documents, double trainSize, int? seed = null)
     {
         if (trainSize is >= 0 and <= 1)
         {
