@@ -22,8 +22,7 @@ public struct Stats
         var logMessage = "Iteration stats :" +
                          "\n\t Feeds processed: " +FeedsProcessed +
                          "\n\t New articles: " + NewArticles +
-                         "\n\t Old articles: " + OldArticles +
-                         "\n";
+                         "\n\t Old articles: " + OldArticles;
         logger.WriteLine(logMessage);
     }
 }
