@@ -26,7 +26,7 @@ public static class EventLoop
     {
         try
         {
-            InvokeLoadingArticles().Wait();
+            InvokeLoadingArticles();
         }
         catch (Exception ex)
         {
@@ -34,7 +34,7 @@ public static class EventLoop
         }
     }
 
-    private static async Task InvokeLoadingArticles()
+    private static void InvokeLoadingArticles()
     {
         _stats.Clear();
         Logger.WriteLine("Iteration started");
@@ -42,48 +42,59 @@ public static class EventLoop
         var processedArticlesNames = ReadProcessedArticleNames();
         var rssFeedLinks = ReadRssFeedLinks();
         Logger.WriteLine("Load rss links from file");
-        
+
+        var feedProcessTasks = new List<Task>();
         foreach (var url in rssFeedLinks)
         {
-            try
-            {
-                var feed = await Rss.Loader.LoadFeed(url);
-                Logger.WriteLine($"Feed {url} loaded");
-
-                var feedArticles = Rss.Processor.GetArticles(feed);
-                var unprocessedArticles = FilterUnprocessedArticles(feedArticles, processedArticlesNames);
-                _stats.OldArticles += feedArticles.Count - unprocessedArticles.Count;
-
-                //int articlesAffectedInThisIter = 0;
-                foreach (var articleToLoad in unprocessedArticles)
-                {
-                    try
-                    {
-                        //if (++articlesAffectedInThisIter == ArticlePerIterationLimit) break;
-                        var article = await Article.Load(articleToLoad.name, articleToLoad.link);
-                        Logger.WriteLine("Article \"" + article.Name + "\" loaded");
-                        await WriteArticleToFile(article);
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.WriteLine(
-                            $"Article {articleToLoad.name} loading finished with exception : {ex.Message}");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Logger.WriteLine(
-                    $"Feed {url} loading finished with exception : {ex.Message}");
-
-            }
-            
-            _stats.FeedsProcessed++;
-            Logger.WriteLine($"Feed {url} processed");
+            feedProcessTasks.Add(ProcessFeed(url, processedArticlesNames));
         }
+        Task.WhenAll(feedProcessTasks).Wait();
 
         _stats.LogStats(Logger);
         Logger.WriteLine("Iteration finished");
+    }
+
+    private static async Task ProcessFeed(string url, List<string> processedArticlesNames)
+    {
+        try
+        {
+            var feed = await Rss.Loader.LoadFeed(url);
+            Logger.WriteLine($"Feed {url} loaded");
+
+            var feedArticles = Rss.Processor.GetArticles(feed);
+            var unprocessedArticles = FilterUnprocessedArticles(feedArticles, processedArticlesNames);
+            Interlocked.Add(ref _stats.OldArticles, feedArticles.Count - unprocessedArticles.Count);
+            
+            var articleProcessTasks = new List<Task>();
+            foreach (var (name, link) in unprocessedArticles)
+            {
+                articleProcessTasks.Add(ProcessArticle(name, link));
+            }
+            Task.WhenAll(articleProcessTasks).Wait();
+        }
+        catch (Exception ex)
+        {
+            Logger.WriteLine(
+                $"Feed {url} loading finished with exception : {ex.Message}");
+        }
+
+        Interlocked.Add(ref _stats.FeedsProcessed, 1);
+        Logger.WriteLine($"Feed {url} processed");
+    }
+
+    private static async Task ProcessArticle(string name, string link)
+    {
+        try
+        {
+            var article = await Article.Load(name, link);
+            Logger.WriteLine("Article \"" + article.Name + "\" loaded");
+            await WriteArticleToFile(article);
+        }
+        catch (Exception ex)
+        {
+            Logger.WriteLine(
+                $"Article {name} loading finished with exception : {ex.Message}");
+        }
     }
 
     private static List<string> ReadLinesFromFile(string path)
@@ -123,7 +134,7 @@ public static class EventLoop
         {
             await writer.WriteLineAsync(article.Name);
             Logger.WriteLine("Article \"" + article.Name + "\" uploaded to file");
-            _stats.NewArticles++;
+            Interlocked.Add(ref _stats.NewArticles, 1);
         }
     }
 }

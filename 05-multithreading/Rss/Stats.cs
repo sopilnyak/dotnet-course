@@ -2,9 +2,9 @@ namespace _05_multithreading.Rss;
 
 public struct Stats
 {
-    public int FeedsProcessed { get; set; } = 0;
-    public int NewArticles { get; set; } = 0;
-    public int OldArticles { get; set; } = 0;
+    public int FeedsProcessed = 0;
+    public int NewArticles = 0;
+    public int OldArticles = 0;
 
     public Stats()
     {
