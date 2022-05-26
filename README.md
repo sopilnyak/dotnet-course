@@ -30,6 +30,9 @@
 
 [Подробное условие](https://docs.google.com/document/d/1dWID8o8qxjwKV1VCRj15tSfm_9X_ue8H-R_fsHSmhWk)
 
+## Тест по .NET
+[Ссылка](https://forms.gle/gmYSwipq8xsM5NZ39)
+
 ## Правила сдачи заданий
 1. Сделать форк репозитория
 2. Выполнить задание в своем форке и сделать Pull Request в этот репозиторий, указав в заголовке фамилию, имя и номер задания
