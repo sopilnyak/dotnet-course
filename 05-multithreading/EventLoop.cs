@@ -39,7 +39,7 @@ public static class EventLoop
         _stats.Clear();
         Logger.WriteLine("Iteration started");
         
-        var processedArticlesNames = ReadProcessedArticleNames();
+        var processedArticlesNames = ReadProcessedArticleNames().ToList();
         var rssFeedLinks = ReadRssFeedLinks();
         Logger.WriteLine("Load rss links from file");
 
@@ -97,28 +97,14 @@ public static class EventLoop
         }
     }
 
-    private static List<string> ReadLinesFromFile(string path)
+    private static IEnumerable<string> ReadRssFeedLinks()
     {
-        using var reader = new StreamReader(path);
-        List<string> result = new();
-        while (reader.ReadLine() is { } line)
-        {
-            result.Add(line);
-        }
-
-        reader.Close();
-
-        return result;
+        return File.ReadAllLines(RssFeedLinksFilePath);
     }
 
-    private static List<string> ReadRssFeedLinks()
+    private static IEnumerable<string> ReadProcessedArticleNames()
     {
-        return ReadLinesFromFile(RssFeedLinksFilePath);
-    }
-
-    private static List<string> ReadProcessedArticleNames()
-    {
-        return ReadLinesFromFile(ProcessedArticlesListFilePath);
+        return File.ReadAllLines(ProcessedArticlesListFilePath);
     }
 
     private static List<(string name, string link)> FilterUnprocessedArticles(List<(string name, string link)> articles,
